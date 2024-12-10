@@ -48,6 +48,7 @@ impl Game {
     }
 
     fn check_win(&self) -> bool {
+        // 引数のlistの要素が全て自分のターンのもの(まるかばつか)判定する
         let check = |list: [Option<bool>; 3]| -> bool {
             let list: Vec<bool> = list.iter().filter_map(|b| *b).collect();
             if list.len() != 3 {
@@ -77,6 +78,7 @@ impl Game {
             }
         }
 
+        // 斜めの判定
         let mut list = [None; 3];
         for i in 0..3 {
             list[i] = self.field[i][i];
@@ -95,6 +97,7 @@ impl Game {
         false
     }
 
+    // 終了処理
     fn quit(&self) {
         self.draw();
         println!(
@@ -114,15 +117,18 @@ fn main() {
     game.draw();
 
     loop {
+        // 番号の入力を受け取る、もし数字以外ならループを始めからにする
         let Ok(pos) = input() else {
             println!("数字を入力してください");
             continue;
         };
+        // 入力された数値が8以上だったらやり直し
         if pos > 8 {
             println!("数字は8までです");
             continue;
         }
 
+        // すでにマスにまるかばつがある状態ならやり直し
         if !game.turn(pos) {
             println!("すでに埋まっています");
             continue;
